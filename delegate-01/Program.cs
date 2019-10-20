@@ -15,7 +15,7 @@ namespace delegate_01
         static void Main(string[] args)
         {
             PopulateCartWithItems();
-            Console.WriteLine($"Total cost for the items (after discount) {cart.GenerateTotal(SubtotalAlert):C2}");
+            Console.WriteLine($"Total cost for the items (after discount) {cart.GenerateTotal(SubtotalAlert, calculateDiscount, Alert):C2}");
             Console.ReadLine();
         }
 
@@ -26,6 +26,26 @@ namespace delegate_01
                 Console.WriteLine($"{counter}: Sub-Total of items is '{subtotal:C2}'");
             else if (counter ==2)
                 Console.WriteLine($"{counter}: Discount given '{subtotal:C2}'");
+        }
+
+        public static decimal calculateDiscount(List<ProductModel> Items, decimal subtotal)
+        {
+            decimal returnVal;
+            if (subtotal > 100)
+                returnVal = subtotal * 0.8M;
+            else if (subtotal > 50)
+                returnVal = subtotal * 0.85M;
+            else if (subtotal > 10)
+                returnVal = subtotal * 0.9M;
+            else
+                returnVal = subtotal;
+
+            return returnVal;
+        }
+
+        private static void Alert(string msg)
+        {
+            Console.WriteLine(msg);
         }
 
         private static void PopulateCartWithItems()

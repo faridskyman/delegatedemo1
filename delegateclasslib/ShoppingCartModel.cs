@@ -13,22 +13,18 @@ namespace delegateclasslib
 
         public List<ProductModel> Items { get; set; } = new List<ProductModel>();
 
-        public decimal GenerateTotal(MentionDiscount mentionDiscount)
+        public decimal GenerateTotal(MentionDiscount mentionDiscount,
+            Func<List<ProductModel>, decimal,decimal> calculateDiscountTotal,
+            Action<string> informUserApplyDiscount)
         {
             decimal subtotal = Items.Sum(x => x.Price);
             decimal returnVal;
-
             mentionDiscount(subtotal);
 
-            if (subtotal > 100)
-                returnVal = subtotal * 0.8M;
-            else if (subtotal > 50)
-                returnVal = subtotal * 0.85M;
-            else if (subtotal > 10)
-                returnVal = subtotal * 0.9M;
-            else
-                returnVal = subtotal;
+            informUserApplyDiscount("Applying discount...");
 
+            returnVal = calculateDiscountTotal(Items, subtotal);
+            
             mentionDiscount(subtotal - returnVal);
 
             return returnVal;
