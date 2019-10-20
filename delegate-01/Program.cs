@@ -15,7 +15,24 @@ namespace delegate_01
         static void Main(string[] args)
         {
             PopulateCartWithItems();
+
             Console.WriteLine($"Total cost for the items (after discount) {cart.GenerateTotal(SubtotalAlert, calculateDiscount, Alert):C2}");
+
+            //representing the call above with anoymous methods
+
+            decimal finaltotal = cart.GenerateTotal(
+                (subtotal) => Console.WriteLine($"Cart2: The subtotal is {subtotal:C2}"),
+                (products, subtotal) =>
+                {
+                    if(products.Count>3)
+                        return subtotal * 0.5M;
+                    else
+                        return subtotal;
+                },
+                (alertmsg) => Console.WriteLine($"Cart2: alert: {alertmsg}"));
+
+            Console.WriteLine($"Cart2: Total cost for the items {finaltotal:C2}");
+
             Console.ReadLine();
         }
 
